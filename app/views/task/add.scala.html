@@ -1,0 +1,21 @@
+@(taskForm: Form[TaskFormData])(implicit request: RequestHeader)
+@*
+* Call the `main` template with two arguments. The first
+* argument is a `String` with the title of the page, the second
+* argument is an `Html` object containing the body of the page.
+*@
+@root("New task") {
+    <form id="task-form" role="form" action="@routes.TaskController.addTask()" method="post"
+    class="form-horizontal">
+        <input type="hidden" name="id" value="@taskForm("id").value.getOrElse(0)"/>
+        <div class="form-group">
+            <label for="text">Text</label>
+            <input type="text" class="form-control" name="text" id="text" value="@taskForm("text").value" placeholder="Task"/>
+        </div>
+        <div class="form-group">
+            <label for="finished">Finished</label>
+            <input type="checkbox" name="finished" id="finished" value="true">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+}

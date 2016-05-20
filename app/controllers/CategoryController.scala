@@ -1,8 +1,9 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
+import services.CategoryService
 
-import models.{Categories, Category, CategoryForm, CategoryFormData}
+import models.{Category, CategoryForm, CategoryFormData}
 import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -15,7 +16,7 @@ import scala.concurrent.Future
 class CategoryController @Inject() extends Controller {
 
   def index = Action.async { implicit request =>
-    Categories.listAll map { categories =>
+    CategoryService.listAll map { categories =>
       Ok(views.html.category.list(categories))
     }
   }
@@ -25,7 +26,7 @@ class CategoryController @Inject() extends Controller {
   }
 
   def editCategory(id: Long) = Action.async { implicit  request =>
-    Categories.get(id) map { res =>
+    CategoryService.get(id) map { res =>
       val category = res.getOrElse(throw new IllegalArgumentException(s"Entity $id was not found."))
       val categoryForm = CategoryForm.form.fill(new CategoryFormData(category.id, category.name))
       Ok(views.html.category.add(categoryForm))
@@ -38,14 +39,14 @@ class CategoryController @Inject() extends Controller {
       errorForm => Future.successful(Ok(views.html.category.add(errorForm))),
       data => {
         val newCategory = Category(data.id, data.name)
-        Categories.saveOrUpdate(newCategory).map(res =>
+        CategoryService.saveOrUpdate(newCategory).map(res =>
           Redirect(routes.CategoryController.index())
         )
       })
   }
 
   def delete(id: Long) = Action.async { implicit  request =>
-    Categories.delete(id) map { res =>
+    CategoryService.delete(id) map { res =>
       Redirect(routes.CategoryController.index())
     }
   }
