@@ -1,0 +1,29 @@
+@(categories: Seq[Category])(implicit request: RequestHeader)
+@*
+* Call the `main` template with two arguments. The first
+* argument is a `String` with the title of the page, the second
+* argument is an `Html` object containing the body of the page.
+*@
+@root("Categories") {
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(category <- categories) {
+            <tr>
+                <td>@category.id</td>
+                <td>@category.name</td>
+                <td>
+                    <a href="@routes.CategoryController.editCategory(category.id)" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="@routes.CategoryController.delete(category.id)" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
