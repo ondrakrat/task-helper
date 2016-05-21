@@ -1,4 +1,3 @@
-@import services.CategoryService
 @(taskForm: Form[TaskFormData], categories: Seq[Category])(implicit request: RequestHeader)
 @*
 * Call the `main` template with two arguments. The first
@@ -21,7 +20,8 @@
             <label for="category">Category</label>
             <select class="form-control" name="category" id="category">
             @for(category <- categories) {
-                <option value="@category.id">@category.name</option>
+                <option value="@category.id" @if(category.id == taskForm.get.categoryId) {
+                    selected="selected"}>@category.name</option>
             }
             </select>
         </div>

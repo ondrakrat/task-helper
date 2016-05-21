@@ -6,6 +6,7 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>Finished</th>
+                <th>Category</th>
                 <th></th>
             </tr>
         </thead>
@@ -21,8 +22,9 @@
                     <span class="glyphicon glyphicon-remove"></span>
                 }
                 </td>
+                <td>@task.categoryId</td>
                 <td>
-                    @*<a href="@routes.TaskController.editTask(task.id)" class="btn btn-warning btn-sm">Edit</a>*@
+                    <a href="@routes.TaskController.editTask(task.id)" class="btn btn-warning btn-sm">Edit</a>
                     @*<a href="@routes.TaskController.delete(task.id)" class="btn btn-danger btn-sm">Delete</a>*@
                 </td>
             </tr>

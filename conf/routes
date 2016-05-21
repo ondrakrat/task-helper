@@ -9,6 +9,7 @@ GET         /dashboard                  controllers.DashboardController.index
 GET         /task                       controllers.TaskController.index
 GET         /task/new                   controllers.TaskController.newTask
 POST        /task/new                   controllers.TaskController.addTask()
+GET         /task/edit/:id              controllers.TaskController.editTask(id: Long)
 
 GET         /category                   controllers.CategoryController.index
 GET         /category/new               controllers.CategoryController.newCategory
