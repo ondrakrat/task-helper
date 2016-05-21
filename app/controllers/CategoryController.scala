@@ -36,7 +36,7 @@ class CategoryController @Inject() extends Controller {
   def addCategory() = Action.async { implicit request =>
     CategoryForm.form.bindFromRequest.fold(
       // if any error in submitted data
-      errorForm => Future.successful(Ok(views.html.category.add(errorForm))),
+      errorForm => Future.successful(BadRequest(views.html.category.add(errorForm))),
       data => {
         val newCategory = Category(data.id, data.name)
         CategoryService.saveOrUpdate(newCategory).map(res =>

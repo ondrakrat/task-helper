@@ -10,9 +10,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
   * @author Ondřej Kratochvíl
   */
-case class Task(id: Long, text: String, finished: Boolean)
+case class Task(id: Long, text: String, finished: Boolean, categoryId: Long)
 
-case class TaskFormData(id: Long, text: String, finished: Boolean)
+case class TaskFormData(id: Long, text: String, finished: Boolean, categoryId: Long)
 
 object TaskForm {
 
@@ -20,12 +20,15 @@ object TaskForm {
     mapping(
       "id" -> longNumber,
       "text" -> nonEmptyText,
-      "finished" -> boolean
+      "finished" -> boolean,
+      "category" -> longNumber
     )(TaskFormData.apply)(TaskFormData.unapply)
   )
 }
 
 class TaskTable(tag: Tag) extends Table[Task](tag, "task") {
+
+  val categories = TableQuery[CategoryTable]
 
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
@@ -33,5 +36,9 @@ class TaskTable(tag: Tag) extends Table[Task](tag, "task") {
 
   def finished = column[Boolean]("finished")
 
-  def * = (id, name, finished) <>(Task.tupled, Task.unapply)
+  def categoryId = column[Long]("category")
+
+  def category = foreignKey("category_fk", categoryId, categories)(_.id)
+
+  def * = (id, name, finished, categoryId) <>(Task.tupled, Task.unapply)
 }
