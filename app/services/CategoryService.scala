@@ -16,16 +16,20 @@ object CategoryService {
   val categories = TableQuery[CategoryTable]
 
   def add(category: Category): Future[String] = {
-    db.run(categories += category).map(res => "Category successfully added").recover {
-      case ex: Exception => ex.getCause.getMessage
-    }
+    db.run(categories += category)
+      .map(res => "Category successfully added")
+      .recover {
+        case ex: Exception => ex.getCause.getMessage
+      }
   }
 
   def saveOrUpdate(category: Category): Future[String] = {
     if (category.id == 0) {
       add(category)
     } else {
-      db.run(categories.filter(_.id === category.id).update(category))
+      db.run(categories
+        .filter(_.id === category.id)
+        .update(category))
         .map(res => s"Category $category.id successfully updated")
         .recover {
           case ex: Exception => ex.getCause.getMessage
@@ -34,14 +38,21 @@ object CategoryService {
   }
 
   def delete(id: Long): Future[Int] = {
-    db.run(categories.filter(_.id === id).delete)
+    db.run(categories
+      .filter(_.id === id)
+      .delete)
   }
 
   def get(id: Long): Future[Option[Category]] = {
-    db.run(categories.filter(_.id === id).result.headOption)
+    db.run(categories
+      .filter(_.id === id)
+      .result
+      .headOption)
   }
 
   def listAll: Future[Seq[Category]] = {
-    db.run(categories.result)
+    db.run(categories
+      .sortBy(_.id)
+      .result)
   }
 }

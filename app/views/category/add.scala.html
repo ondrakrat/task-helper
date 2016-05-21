@@ -1,17 +1,22 @@
 @(categoryForm: Form[CategoryFormData])(implicit request: RequestHeader)
-@*
-* Call the `main` template with two arguments. The first
-* argument is a `String` with the title of the page, the second
-* argument is an `Html` object containing the body of the page.
-*@
-@root("New category") {
-    <form id="category-form" role="form" action="@routes.CategoryController.addCategory()" method="post"
-    class="form-horizontal">
-        <input type="hidden" name="id" value="@categoryForm("id").value.getOrElse(0)"/>
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" name="name" id="name" value="@categoryForm("name").value" placeholder="Category name"/>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-}
+    @*
+    * Call the `main` template with two arguments. The first
+    * argument is a `String` with the title of the page, the second
+    * argument is an `Html` object containing the body of the page.
+    *@
+    @root("New category") {
+        <h1>@if(categoryForm("id").value.isDefined) {
+            Edit category
+        } else {
+            Create category
+        }</h1>
+        <form id="category-form" role="form" action="@routes.CategoryController.addCategory()" method="post"
+        class="form-horizontal col-sm-6">
+            <input type="hidden" name="id" value="@categoryForm("id").value.getOrElse(0)"/>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" name="name" id="name" value="@categoryForm("name").value" placeholder="Category name"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    }

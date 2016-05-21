@@ -1,3 +1,17 @@
 div.content {
     margin-top: 60px;
 }
+
+table.dashboard-table th:nth-child(1) {
+    width: 10%;
+}
+table.dashboard-table th:nth-child(2) {
+    width: 50%;
+}
+table.dashboard-table th:nth-child(3) {
+    width: 10%;
+}
+
+div.row a.btn-primary {
+    margin-top: 20px;
+}

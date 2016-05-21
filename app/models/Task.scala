@@ -1,16 +1,26 @@
 package models
 
+import org.joda.time.{DateTime, LocalDate}
 import play.api.data.Form
 import play.api.data.Forms._
+import services.CategoryService
 import slick.lifted.Tag
 import slick.driver.PostgresDriver.api._
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
 
 /**
   * @author Ondřej Kratochvíl
   */
-case class Task(id: Long, text: String, finished: Boolean, categoryId: Long)
+case class Task(id: Long, text: String, finished: Boolean, categoryId: Long) {
+
+  lazy val category = {
+    Await.result(CategoryService.get(categoryId), Duration(1000, "millis"))
+      .getOrElse(throw new IllegalArgumentException(s"Category $categoryId was not found"))
+  }
+}
 
 case class TaskFormData(id: Long, text: String, finished: Boolean, categoryId: Long)
 
@@ -21,7 +31,7 @@ object TaskForm {
       "id" -> longNumber,
       "text" -> nonEmptyText,
       "finished" -> boolean,
-      "category" -> longNumber
+      "categoryId" -> longNumber
     )(TaskFormData.apply)(TaskFormData.unapply)
   )
 }

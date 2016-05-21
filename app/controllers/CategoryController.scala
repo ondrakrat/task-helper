@@ -1,8 +1,8 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import services.CategoryService
 
+import services.{CategoryService, TaskService}
 import models.{Category, CategoryForm, CategoryFormData}
 import play.api.mvc.{Action, Controller}
 
@@ -13,7 +13,7 @@ import scala.concurrent.Future
   * @author Ondřej Kratochvíl
   */
 @Singleton
-class CategoryController @Inject() extends Controller {
+class CategoryController @Inject() extends Controller with Timeout {
 
   def index = Action.async { implicit request =>
     CategoryService.listAll map { categories =>
@@ -46,6 +46,7 @@ class CategoryController @Inject() extends Controller {
   }
 
   def delete(id: Long) = Action.async { implicit  request =>
+    async(TaskService.deleteForCategory(id))
     CategoryService.delete(id) map { res =>
       Redirect(routes.CategoryController.index())
     }

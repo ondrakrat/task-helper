@@ -1,8 +1,52 @@
+@(categories: Seq[Category], tasks: Seq[Task])(implicit request: RequestHeader)
 @*
 * Call the `main` template with two arguments. The first
 * argument is a `String` with the title of the page, the second
 * argument is an `Html` object containing the body of the page.
 *@
 @root("Dashboard") {
-    <div>Welcome to dashboard!</div>
+    <div class="row">
+        <h1 class="pull-left">Dashboard</h1>
+        <a class="pull-right btn btn-primary" href="@routes.DashboardController.index(Some(true))">
+            Include finished tasks</a>
+    </div>
+    @for(category <- categories) {
+        <h2>@category.name</h2>
+        @defining(tasks.filter(_.categoryId == category.id)) { categoryTasks: Seq[Task] =>
+            @if(categoryTasks.isEmpty) {
+                <div class="alert alert-info">No tasks in this category</div>
+            } else {
+                <table class="table table-striped table-hover dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Text</th>
+                            <th>Finished</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @for(task <- categoryTasks) {
+                        <tr>
+                            <td>@task.id</td>
+                            <td>
+                                <a href="@routes.TaskController.editTask(task.id)">@task.text</a>
+                            </td>
+                            <td>
+                            @if(task.finished) {
+                                <span class="glyphicon glyphicon-ok"></span>
+                            } else {
+                                <span class="glyphicon glyphicon-remove"></span>
+                            }
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-success" href="@routes.TaskController.finish(task.id)">Finish!</a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+        }
+    }
 }

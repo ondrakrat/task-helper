@@ -2,14 +2,16 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 # Project specific routes
-GET         /                           controllers.DashboardController.index
-GET         /index                      controllers.DashboardController.index
-GET         /dashboard                  controllers.DashboardController.index
+GET         /                           controllers.DashboardController.index(showFinished: Option[Boolean])
+GET         /index                      controllers.DashboardController.index(showFinished: Option[Boolean])
+GET         /dashboard                  controllers.DashboardController.index(showFinished: Option[Boolean])
 
 GET         /task                       controllers.TaskController.index
 GET         /task/new                   controllers.TaskController.newTask
 POST        /task/new                   controllers.TaskController.addTask()
 GET         /task/edit/:id              controllers.TaskController.editTask(id: Long)
+GET         /task/delete/:id            controllers.TaskController.delete(id: Long)
+GET         /task/finish/:id            controllers.TaskController.finish(id: Long)
 
 GET         /category                   controllers.CategoryController.index
 GET         /category/new               controllers.CategoryController.newCategory
